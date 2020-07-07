@@ -1,0 +1,65 @@
+pool: Default
+stages:
+    - stage: cmd
+      jobs:
+            - job: cmd
+              steps: 
+                - task: CmdLine@2
+                  inputs:
+                    script: |
+                      echo Write your commands here
+                      
+                      echo Hello world
+    - stage: Build
+      displayName: Build image
+      jobs:
+            - job: Build
+              displayName: Build
+              pool: Default
+              steps:
+                  - task: PublishBuildArtifacts@1
+                    name: task1
+                    displayName: 'Publish Artifact: artifact1'
+                    inputs:
+                        PathtoPublish: README.md
+                        ArtifactName: artifact1
+                  - task: PowerShell@2
+                    continueOnError: true
+                    name: 'task_2'
+                    inputs:
+                        targetType: inline
+                        script: |
+                            Write-Host "##vso[build.addbuildtag11]tag2"
+    - stage: TagBuild
+      displayName: Tag the Build
+      jobs:
+            - job: TagBuild
+              displayName: Tag Build
+              pool: Default
+              steps:
+                  - task: PowerShell@2
+                    name: 'task_2'
+                    inputs:
+                        targetType: inline
+                        script: |
+                            Write-Host "##vso[build.addbuildtag]tag2"
+                  - task: PowerShell@2
+                    name: 'task_3'
+                    inputs:
+                        targetType: inline
+                        script: |
+                            Write-Host "##vso[build.addbuildtag]tag1"
+    - stage: TagBuild2
+      displayName: Tag the Build2
+      jobs:
+            - job: TagBuild2
+              displayName: Tag Build2
+              pool: Default
+              steps:
+                  - task: PowerShell@2
+                    name: 'task_2'
+                    inputs:
+                        targetType: inline
+                        script: |
+                            Write-Host "##vso[build.addbuildtag]tag3"
+                            Write-Host "##vso[build.addbuildtag]tag4"
