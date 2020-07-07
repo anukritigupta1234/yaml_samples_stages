@@ -1,0 +1,19 @@
+trigger: none
+resources:
+  pipelines:
+  - pipeline: myresourcevars
+    source: hks-local-tfs
+    trigger:
+      tags:
+        - Tag33
+
+steps:
+- script: |
+    echo $(resources.pipeline.myresourcevars.pipelineID)
+    echo $(resources.pipeline.myresourcevars.runName)
+    echo $(resources.pipeline.myresourcevars.runID)
+    echo $(resources.pipeline.myresourcevars.runURI)
+    echo $(resources.pipeline.myresourcevars.sourceBranch)
+    echo $(resources.pipeline.myresourcevars.sourceCommit)
+    echo $(resources.pipeline.myresourcevars.sourceProvider)
+    echo $(resources.pipeline.myresourcevars.requestedFor)
